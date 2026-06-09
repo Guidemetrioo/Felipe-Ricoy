@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     end: "bottom bottom",
                     scrub: 1, // smooth scrub response
                     pin: ".trajectory-sticky",
+                    invalidateOnRefresh: true, // recalculates sizes on window resize
                     onLeave: () => {
                         document.body.classList.add('trajectory-complete');
                     },
@@ -141,39 +142,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // PHASE 1: Car completes the curve (0% to 60% of scroll - tempo 0 to 6.0 in timeline)
+            // PHASE 1: Car completes the curve (0% to 50% of scroll - tempo 0 to 5.0 in timeline)
             trajTl.to(trajVideo, {
                 currentTime: trajDuration,
                 ease: "none",
-                duration: 6.0
+                duration: 5.0
             }, 0);
 
-            // PHASE 2: Information fades in (60% to 100% of scroll - tempo 6.0 to 10.0 in timeline)
-            
-            // 1. Dark contrast overlay fades in
+            // PHASE 2: Information fades in (50% to 60% of scroll - tempo 5.0 to 6.0 in timeline)
             trajTl.to(".trajectory-dark-overlay", {
-                opacity: 0.75,
-                duration: 1.5,
+                opacity: 0.8,
+                duration: 1.0,
                 ease: "power2.out"
-            }, 6.0);
+            }, 5.0);
 
-            // 2. Timeline content wrapper fades in and slides up
             trajTl.to(".trajectory-content", {
                 opacity: 1,
                 y: 0,
-                duration: 2.0,
+                duration: 1.0,
                 ease: "power2.out"
-            }, 6.0);
+            }, 5.0);
 
-            // 3. Animate the active progress line of the timeline
+            // PHASE 3: Horizontal scroll & progress track (60% to 100% of scroll - tempo 6.0 to 10.0 in timeline)
+            const timelineWrapper = document.querySelector('.timeline-wrapper');
+            const timelineContainer = document.querySelector('.timeline-container');
+            if (timelineWrapper && timelineContainer) {
+                gsap.set(timelineWrapper, { x: 0 });
+                trajTl.to(timelineWrapper, {
+                    x: () => -(timelineWrapper.scrollWidth - timelineContainer.clientWidth),
+                    ease: "none",
+                    duration: 4.0
+                }, 6.0);
+            }
+
             const progressLine = document.querySelector('.timeline-track-progress');
             if (progressLine) {
                 gsap.set(progressLine, { width: "0%" });
                 trajTl.to(progressLine, {
                     width: "100%",
-                    duration: 3.0,
-                    ease: "power1.inOut"
-                }, 7.0);
+                    ease: "none",
+                    duration: 4.0
+                }, 6.0);
             }
         };
 

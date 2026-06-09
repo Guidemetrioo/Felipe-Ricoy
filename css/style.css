@@ -228,7 +228,7 @@ img {
 }
 
 .header-nav.scrolled {
-    background: linear-gradient(90deg, #721C8B 0%, #D822B8 10%, #008BB8 30%, #00C7C7 50%, #008BB8 70%, #D822B8 90%, #721C8B 100%);
+    background: linear-gradient(90deg, #721C8B 0%, #D822B8 5%, #008BB8 15%, #00C7C7 50%, #008BB8 85%, #D822B8 95%, #721C8B 100%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
     box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -290,7 +290,7 @@ img {
 }
 
 .nav-link {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-muted);
@@ -557,12 +557,17 @@ img {
     font-weight: 400;
 }
 
+#sobre {
+    padding-bottom: 20px !important;
+}
+
 /* 4. LINHA DO TEMPO (TIMELINE) */
 .trajectory-scroll-driver {
     position: relative;
     height: 300vh;
     background-color: #050505;
     z-index: 10;
+    margin-top: -30px;
 }
 
 .trajectory-sticky {
@@ -636,24 +641,20 @@ img {
 
 .timeline-wrapper {
     display: flex;
-    gap: 48px;
-    overflow-x: auto;
-    padding-bottom: 40px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--brand-purple) var(--bg-surface);
+    gap: 60px;
+    overflow-x: hidden;
+    scrollbar-width: none; /* remove native scrollbar */
+    padding-bottom: 20px;
+    width: max-content; /* allows calculating scrollWidth correctly */
 }
 
 .timeline-wrapper::-webkit-scrollbar {
-    height: 4px;
-}
-
-.timeline-wrapper::-webkit-scrollbar-thumb {
-    background-color: var(--brand-purple);
+    display: none; /* remove scrollbar */
 }
 
 .timeline-track-line {
     position: absolute;
-    top: 115px;
+    top: 67px; /* centered relative to the dots */
     left: 0;
     height: 2px;
     background-color: var(--color-border);
@@ -663,19 +664,21 @@ img {
 
 .timeline-track-progress {
     position: absolute;
-    top: 115px;
+    top: 67px; /* centered relative to the dots */
     left: 0;
     height: 2px;
     background-color: var(--brand-purple);
     width: 0;
     z-index: 2;
-    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .timeline-node {
-    min-width: 300px;
+    min-width: 380px;
     position: relative;
     z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .timeline-dot {
@@ -684,7 +687,7 @@ img {
     background-color: var(--bg-main);
     border: 3px solid var(--brand-purple);
     border-radius: 50%;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     transition: var(--transition-smooth);
     box-shadow: 0 0 10px var(--brand-purple-glow);
 }
@@ -700,14 +703,55 @@ img {
     font-family: var(--font-title);
     font-size: 2.2rem;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-weight: 400;
+}
+
+.timeline-achievement {
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.timeline-img-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    clip-path: var(--cut-sm);
+    border: 1px solid var(--color-border);
+    background-color: var(--placeholder-bg);
+}
+
+.timeline-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+}
+
+.timeline-node:hover .timeline-img-container img {
+    transform: scale(1.05);
 }
 
 .timeline-desc {
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--metallic-grey);
+}
+
+.highlight-gold {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+}
+
+.highlight-silver {
+    color: #e5e4e2;
+    text-shadow: 0 0 10px rgba(229, 228, 226, 0.15);
 }
 
 /* 5. ESTATÍSTICAS */
