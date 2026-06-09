@@ -1,3 +1,9 @@
+// Force scroll restoration to manual and scroll to top on refresh (prevent scroll jumps)
+if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // Register GSAP ScrollTrigger
@@ -5,10 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.registerPlugin(ScrollTrigger);
         
         const video = document.getElementById("helmet-video");
-        const videoOverlay = document.getElementById("videoOverlay");
-        const heroTextOverlay = document.getElementById("heroTextOverlay");
-        const scrollHelper = document.getElementById("scrollHelper");
-
+        const scrollHint = document.getElementById("scrollHint");
+        
         const initScrollVideo = () => {
             if (!video) return;
             const duration = video.duration || 1.8;
@@ -16,49 +20,91 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set video position to end of clip at the top of scroll (visor closed)
             video.currentTime = duration;
             
-            // Create a single timeline linked to ScrollTrigger with smooth scrub
+            // Create a single timeline linked to ScrollTrigger with smooth scrub and pin
             const tl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: "#hero-banner",
+                    trigger: "#hero",
                     start: "top top",
                     end: "bottom bottom",
-                    scrub: 2, // Smooth scrubbing response to avoid jumps
+                    scrub: 1.5, // smooth scrub response
+                    pin: ".hero-sticky-content",
+                    onLeave: () => {
+                        document.body.classList.add('hero-complete');
+                    },
+                    onEnterBack: () => {
+                        document.body.classList.remove('hero-complete');
+                    }
                 }
             });
 
-            // FASE 1: O Scroll Inicial (vídeo responde e scroll helper desaparece)
-            if (scrollHelper) {
-                tl.to(scrollHelper, {
+            // FASE 1 & FASE 2: Abertura da viseira (0% a 75% do scroll - tempo 0 a 7.5 na timeline)
+            
+            // 1. Scroll helper (Hint) desaparece imediatamente no início do scroll
+            if (scrollHint) {
+                tl.to(scrollHint, {
                     opacity: 0,
-                    duration: 0.3,
+                    scale: 0.9,
+                    duration: 1.5,
                     ease: "power1.out"
                 }, 0);
             }
 
-            // Animacão da viseira abrindo (currentTime vai de duration para 0)
+            // 2. A viseira abre (currentTime do vídeo vai de duration para 0)
             tl.to(video, {
                 currentTime: 0,
                 ease: "none",
-                duration: 2.0 // relative duration in timeline
+                duration: 7.5 // termina em 75% do progresso total
             }, 0);
 
-            // FASE 2: A Revelacão Dramática (após viseira abrir, fade-in do overlay escuro e título subindo)
-            if (videoOverlay) {
-                tl.to(videoOverlay, {
-                    backgroundColor: "rgba(5, 5, 5, 0.45)", // Leve escurecimento para leitura
-                    duration: 1.0,
-                    ease: "power1.out"
-                }, 1.7); // Começa um pouco antes do final do vídeo para fluidez
-            }
+            // 3. Efeito de zoom-out na imagem do capacete (scale 1.05 -> 1.0)
+            tl.to(video, {
+                scale: 1.0,
+                ease: "none",
+                duration: 7.5
+            }, 0);
 
-            if (heroTextOverlay) {
-                tl.to(heroTextOverlay, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.3,
-                    ease: "power2.out"
-                }, 1.7); // Engata junto com o overlay escuro
-            }
+
+            // FASE 3: Entrada cinematográfica do título (acima de 75% do scroll - tempo 7.5 a 10.0 na timeline)
+            
+            // 1. Fade-in do overlay escuro para contraste
+            tl.to(".hero-dark-overlay", {
+                opacity: 0.55,
+                duration: 0.8,
+                ease: "power1.out"
+            }, 7.5);
+
+            // 2. Aparece o supertítulo "PILOTO PROFISSIONAL"
+            tl.to(".hero-eyebrow", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            }, 7.8);
+
+            // 3. Entrada triunfal de "FELIPE RICOY" letra por letra (stagger)
+            tl.to(".hero-name .char", {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                stagger: 0.06,
+                ease: "power3.out"
+            }, 8.0);
+
+            // 4. Aparece a tagline
+            tl.to(".hero-tagline", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 8.8);
+
+            // 5. Revelacão do botão CTA
+            tl.to(".hero-cta", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 9.4);
         };
 
         if (video) {
@@ -98,28 +144,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. SCROLLED NAVIGATION STYLING & ACTIVE LINK DETECTION
     const mainNav = document.getElementById('mainNav');
     const sections = document.querySelectorAll('section[id]');
+    const heroSection = document.getElementById('hero');
     
     const handleScroll = () => {
-        // Sticky/scrolled style
-        if (window.scrollY > 100) {
+        const heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight * 2.5;
+        const unpinThreshold = heroHeight - window.innerHeight; // Height where hero unpins (150vh)
+        
+        // Sticky/scrolled style lock: only solid background after hero unpins
+        if (window.scrollY >= unpinThreshold - 80) {
             mainNav.classList.add('scrolled');
         } else {
             mainNav.classList.remove('scrolled');
         }
 
-        // Active link highlighting
+        // Active link highlighting lock: ignore highlighting while inside hero scroll
         let currentSectionId = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 120;
-            const sectionHeight = section.offsetHeight;
-            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-                currentSectionId = section.getAttribute('id');
-            }
-        });
+        if (window.scrollY >= unpinThreshold - 120) {
+            sections.forEach(section => {
+                if (section.getAttribute('id') === 'hero') return;
+                const sectionTop = section.offsetTop - 120;
+                const sectionHeight = section.offsetHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+        }
 
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href') === `#${currentSectionId}`) {
+            if (currentSectionId && link.getAttribute('href') === `#${currentSectionId}`) {
                 link.classList.add('active');
             }
         });
