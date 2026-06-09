@@ -116,13 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const trajVideo = document.getElementById("trajectory-video");
         const initScrollTrajectoryVideo = () => {
-            if (!trajVideo) return;
-            const trajDuration = trajVideo.duration || 2.0;
-            
-            // Set video position to start of clip at the top of scroll
-            trajVideo.currentTime = 0;
+            const timelineWrapper = document.querySelector('.timeline-wrapper');
+            const timelineContainer = document.querySelector('.timeline-container');
+            const progressLine = document.querySelector('.timeline-track-progress');
+            if (!timelineWrapper) return;
             
             // Create a timeline linked to ScrollTrigger with smooth scrub and pin
             const trajTl = gsap.timeline({
@@ -142,57 +140,99 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // PHASE 1: Car completes the curve (0% to 50% of scroll - tempo 0 to 5.0 in timeline)
-            trajTl.to(trajVideo, {
-                currentTime: trajDuration,
-                ease: "none",
-                duration: 5.0
-            }, 0);
-
-            // PHASE 2: Information fades in (50% to 60% of scroll - tempo 5.0 to 6.0 in timeline)
+            // PHASE 1: Information fades in (0% to 20% of scroll - tempo 0 to 2.0 in timeline)
             trajTl.to(".trajectory-dark-overlay", {
                 opacity: 0.8,
-                duration: 1.0,
+                duration: 2.0,
                 ease: "power2.out"
-            }, 5.0);
+            }, 0);
 
             trajTl.to(".trajectory-content", {
                 opacity: 1,
                 y: 0,
-                duration: 1.0,
+                duration: 2.0,
                 ease: "power2.out"
-            }, 5.0);
+            }, 0);
 
-            // PHASE 3: Horizontal scroll & progress track (60% to 100% of scroll - tempo 6.0 to 10.0 in timeline)
-            const timelineWrapper = document.querySelector('.timeline-wrapper');
-            const timelineContainer = document.querySelector('.timeline-container');
+            // PHASE 2: Horizontal scroll & progress track (20% to 100% of scroll - tempo 2.0 to 10.0 in timeline)
             if (timelineWrapper && timelineContainer) {
                 gsap.set(timelineWrapper, { x: 0 });
                 trajTl.to(timelineWrapper, {
                     x: () => -(timelineWrapper.scrollWidth - timelineContainer.clientWidth),
                     ease: "none",
-                    duration: 4.0
-                }, 6.0);
+                    duration: 8.0
+                }, 2.0);
             }
 
-            const progressLine = document.querySelector('.timeline-track-progress');
             if (progressLine) {
                 gsap.set(progressLine, { width: "0%" });
                 trajTl.to(progressLine, {
                     width: "100%",
                     ease: "none",
-                    duration: 4.0
-                }, 6.0);
+                    duration: 8.0
+                }, 2.0);
+            }
+
+            // Dot indicators and Stop Points (synchronized with Phase 2)
+            const dots = document.querySelectorAll('.timeline-node .timeline-dot');
+            if (dots.length >= 4) {
+                // Initialize first dot as active
+                gsap.set(dots[0], { backgroundColor: "#39FF14", borderColor: "#39FF14", scale: 1.3, boxShadow: "0 0 15px rgba(57, 255, 20, 0.6)" });
+                dots[1].classList.add('next-stop');
+
+                // Animate Dot 1 (appears at ~4.6 in timeline)
+                trajTl.to(dots[1], {
+                    backgroundColor: "#39FF14",
+                    borderColor: "#39FF14",
+                    scale: 1.3,
+                    boxShadow: "0 0 15px rgba(57, 255, 20, 0.6)",
+                    duration: 0.5,
+                    onStart: () => {
+                        dots[1].classList.remove('next-stop');
+                        dots[2].classList.add('next-stop');
+                    },
+                    onReverseComplete: () => {
+                        dots[1].classList.add('next-stop');
+                        dots[2].classList.remove('next-stop');
+                    }
+                }, 4.6);
+
+                // Animate Dot 2 (appears at ~7.3 in timeline)
+                trajTl.to(dots[2], {
+                    backgroundColor: "#39FF14",
+                    borderColor: "#39FF14",
+                    scale: 1.3,
+                    boxShadow: "0 0 15px rgba(57, 255, 20, 0.6)",
+                    duration: 0.5,
+                    onStart: () => {
+                        dots[2].classList.remove('next-stop');
+                        dots[3].classList.add('next-stop');
+                    },
+                    onReverseComplete: () => {
+                        dots[2].classList.add('next-stop');
+                        dots[3].classList.remove('next-stop');
+                    }
+                }, 7.3);
+
+                // Animate Dot 3 (appears at ~9.8 in timeline)
+                trajTl.to(dots[3], {
+                    backgroundColor: "#39FF14",
+                    borderColor: "#39FF14",
+                    scale: 1.3,
+                    boxShadow: "0 0 15px rgba(57, 255, 20, 0.6)",
+                    duration: 0.5,
+                    onStart: () => {
+                        dots[3].classList.remove('next-stop');
+                    },
+                    onReverseComplete: () => {
+                        dots[3].classList.add('next-stop');
+                    }
+                }, 9.8);
             }
         };
 
-        if (trajVideo) {
-            if (trajVideo.readyState >= 1) {
-                initScrollTrajectoryVideo();
-            } else {
-                trajVideo.addEventListener('loadedmetadata', initScrollTrajectoryVideo);
-            }
-        }
+        // Initialize immediately
+        initScrollTrajectoryVideo();
     }
 
     // 1. MOBILE MENU TOGGLE

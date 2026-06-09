@@ -719,7 +719,7 @@ img {
 
 .timeline-img-container {
     width: 100%;
-    height: 180px;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     margin-bottom: 16px;
     clip-path: var(--cut-sm);
@@ -736,6 +736,26 @@ img {
 
 .timeline-node:hover .timeline-img-container img {
     transform: scale(1.05);
+}
+
+.timeline-dot.next-stop {
+    background-color: var(--bg-main) !important;
+    border-color: var(--brand-purple) !important;
+    box-shadow: 0 0 10px var(--brand-purple-glow) !important;
+    animation: pulseNextStop 1.5s infinite alternate !important;
+}
+
+@keyframes pulseNextStop {
+    0% {
+        transform: scale(1.0);
+        box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+        border-color: var(--brand-purple);
+    }
+    100% {
+        transform: scale(1.25);
+        box-shadow: 0 0 18px rgba(124, 58, 237, 0.8), 0 0 8px var(--brand-lime-glow);
+        border-color: var(--brand-lime);
+    }
 }
 
 .timeline-desc {
