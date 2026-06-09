@@ -198,7 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const timer = setInterval(() => {
                     currentNum += increment;
                     if (currentNum >= targetNum) {
-                        entry.target.textContent = targetNum + (entry.target.getAttribute('data-target') === '1450' || entry.target.getAttribute('data-target') === '2' ? '+' : '');
+                        let suffix = '';
+                        const tgt = entry.target.getAttribute('data-target');
+                        if (tgt === '2') suffix = '+';
+                        if (tgt === '204') suffix = ' km/h';
+                        entry.target.textContent = (tgt === '17' ? '#' : '') + targetNum + suffix;
                         clearInterval(timer);
                     } else {
                         entry.target.textContent = currentNum;

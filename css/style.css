@@ -3,7 +3,8 @@
 /* Identity Variables */
 :root {
     --bg-main: #050505;
-    --bg-surface: #0a0a0a;
+    --bg-surface: #0a0a0c;
+    --bg-card-gradient: linear-gradient(145deg, #14141a 0%, #050507 100%);
     --bg-nav-scroll: rgba(5, 5, 5, 0.95);
     --text-primary: #F8F8F8;
     --text-muted: #8E8E8E;
@@ -227,9 +228,32 @@ img {
 }
 
 .header-nav.scrolled {
-    background-color: var(--bg-nav-scroll);
-    border-bottom: 1px solid var(--brand-purple);
+    background: linear-gradient(135deg, #008BB8 0%, #00C7C7 35%, #D822B8 70%, #721C8B 100%);
+    background-size: 200% 200%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.header-nav.scrolled .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.header-nav.scrolled .nav-link:hover,
+.header-nav.scrolled .nav-link.active {
+    color: #ffffff;
+}
+
+.header-nav.scrolled .nav-link::after {
+    background-color: #ffffff;
+}
+
+.header-nav.scrolled .logo {
+    color: #ffffff;
+}
+
+.header-nav.scrolled .logo span {
+    color: #ffffff;
 }
 
 .nav-container {
@@ -458,7 +482,7 @@ img {
 
 /* 3. QUEM É FELIPE RICOY (ABOUT) */
 .section-padding {
-    padding: 120px 0;
+    padding: 70px 0;
     position: relative;
     z-index: 1;
 }
@@ -505,7 +529,7 @@ img {
 }
 
 .pillar-card {
-    background-color: var(--bg-surface);
+    background: var(--bg-card-gradient);
     padding: 28px;
     border: 1px solid var(--color-border);
     transition: var(--transition-smooth);
@@ -627,7 +651,7 @@ img {
 }
 
 .stat-card {
-    background-color: var(--bg-surface);
+    background: var(--bg-card-gradient);
     padding: 45px 30px;
     text-align: center;
     border: 1px solid var(--color-border);
@@ -672,7 +696,7 @@ img {
 .section-header-center {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 70px auto;
+    margin: 0 auto 40px auto;
 }
 
 .section-header-center h2 {
@@ -699,7 +723,7 @@ img {
 }
 
 .benefit-card {
-    background-color: var(--bg-main);
+    background: var(--bg-card-gradient);
     padding: 35px;
     border: 1px solid var(--color-border);
     transition: var(--transition-smooth);
@@ -739,7 +763,7 @@ img {
 }
 
 .tier-card {
-    background-color: var(--bg-surface);
+    background: var(--bg-card-gradient);
     padding: 48px 36px;
     border: 1px solid var(--color-border);
     display: flex;
@@ -977,7 +1001,7 @@ img {
 }
 
 .news-card {
-    background-color: var(--bg-surface);
+    background: var(--bg-card-gradient);
     border: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
