@@ -673,6 +673,7 @@ img {
 }
 
 .timeline-node {
+    width: 380px;
     min-width: 380px;
     position: relative;
     z-index: 3;
