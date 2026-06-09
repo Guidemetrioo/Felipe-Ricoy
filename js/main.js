@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!video) return;
             const duration = video.duration || 1.8;
             
-            // Set video position to end of clip at the top of scroll (visor closed)
-            video.currentTime = duration;
+            // Set video position to start of clip at the top of scroll (visor closed)
+            video.currentTime = 0;
             
             // Create a single timeline linked to ScrollTrigger with smooth scrub and pin
             const tl = gsap.timeline({
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     trigger: "#hero",
                     start: "top top",
                     end: "bottom bottom",
-                    scrub: 1.5, // smooth scrub response
-                    pin: ".hero-sticky-content",
+                    scrub: 1, // smooth scrub response
+                    pin: ".hero-sticky",
                     onLeave: () => {
                         document.body.classList.add('hero-complete');
                     },
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // FASE 1 & FASE 2: Abertura da viseira (0% a 75% do scroll - tempo 0 a 7.5 na timeline)
+            // FASE 1: Abertura da viseira (0% a 60% do scroll - tempo 0 a 6.0 na timeline)
             
             // 1. Scroll helper (Hint) desaparece imediatamente no início do scroll
             if (scrollHint) {
@@ -49,62 +49,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 0);
             }
 
-            // 2. A viseira abre (currentTime do vídeo vai de duration para 0)
+            // 2. A viseira abre (currentTime do vídeo vai de 0 para duration)
             tl.to(video, {
-                currentTime: 0,
+                currentTime: duration,
                 ease: "none",
-                duration: 7.5 // termina em 75% do progresso total
+                duration: 6.0 // termina em 60% do progresso total
             }, 0);
 
             // 3. Efeito de zoom-out na imagem do capacete (scale 1.05 -> 1.0)
             tl.to(video, {
                 scale: 1.0,
                 ease: "none",
-                duration: 7.5
+                duration: 6.0
             }, 0);
 
 
-            // FASE 3: Entrada cinematográfica do título (acima de 75% do scroll - tempo 7.5 a 10.0 na timeline)
+            // FASE 2: Entrada cinematográfica do título (60% a 100% do scroll - tempo 6.0 a 10.0 na timeline)
             
             // 1. Fade-in do overlay escuro para contraste
             tl.to(".hero-dark-overlay", {
-                opacity: 0.55,
-                duration: 0.8,
-                ease: "power1.out"
-            }, 7.5);
+                opacity: 0.7,
+                duration: 1.5,
+                ease: "power2.out"
+            }, 6.0);
 
             // 2. Aparece o supertítulo "PILOTO PROFISSIONAL"
             tl.to(".hero-eyebrow", {
                 opacity: 1,
                 y: 0,
-                duration: 0.8,
+                duration: 1.2,
                 ease: "power2.out"
-            }, 7.8);
+            }, 6.0);
 
-            // 3. Entrada triunfal de "FELIPE RICOY" letra por letra (stagger)
-            tl.to(".hero-name .char", {
+            // 3. Entrada triunfal de "FELIPE RICOY" (rise, fade, letter-spacing decrease)
+            tl.to(".hero-name", {
                 opacity: 1,
                 y: 0,
-                duration: 1.2,
-                stagger: 0.06,
-                ease: "power3.out"
-            }, 8.0);
+                letterSpacing: "0.02em",
+                duration: 2.0,
+                ease: "power2.out"
+            }, 6.2);
 
             // 4. Aparece a tagline
             tl.to(".hero-tagline", {
                 opacity: 1,
                 y: 0,
-                duration: 0.6,
+                duration: 1.2,
                 ease: "power2.out"
-            }, 8.8);
+            }, 6.8);
 
-            // 5. Revelacão do botão CTA
+            // 5. Revelação do botão CTA
             tl.to(".hero-cta", {
                 opacity: 1,
                 y: 0,
-                duration: 0.6,
+                duration: 1.2,
                 ease: "power2.out"
-            }, 9.4);
+            }, 7.4);
         };
 
         if (video) {
