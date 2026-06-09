@@ -118,43 +118,55 @@
             </div>
         </section>
 
-        <!-- Timeline Section -->
-        <section class="section-padding timeline-section scroll-reveal" id="trajetoria">
-            <div class="container">
-                <span class="label-red">CRONOLOGIA DE DESENVOLVIMENTO</span>
-                <div class="timeline-container">
-                    <div class="timeline-track-line"></div>
-                    <div class="timeline-track-progress"></div>
-                    <div class="timeline-wrapper">
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">KART</div>
-                            <p class="timeline-desc">Base formativa em Campinas, SP. Desenvolvimento de reflexos rápidos, refinamento técnico e primeiros resultados no kartismo regional.</p>
-                        </div>
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">SIM RACING</div>
-                            <p class="timeline-desc">Estudo técnico constante: 2x Campeão F3 Pro Series (Assetto Corsa) e 7x Campeão GT3 Sprint Silver (Assetto Corsa Competizione) em simuladores profissionais.</p>
-                        </div>
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">2024</div>
-                            <p class="timeline-desc">Estreia nos Monopostos - Ingresso na Fórmula Vee Open. Adaptação à aerodinâmica, dinâmica de chassi e suspensão de monopostos.</p>
-                        </div>
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">2025</div>
-                            <p class="timeline-desc">Vice-Campeão Fórmula Vee Open. Liderança de campeonato após vitória épica em Piracicaba (ECPA). Homenageado como Destaque do Ano pela Sociedade Hípica de Campinas.</p>
-                        </div>
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">2026</div>
-                            <p class="timeline-desc">Fórmula 1600 - Transição para a maior categoria de fórmulas do Brasil. Pilotando o chassi Mangusto R-5 motor Ford Zetec Rocam (~122hp, 204 km/h) em Interlagos e Piracicaba.</p>
-                        </div>
-                        <div class="timeline-node">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-year">FUTURO</div>
-                            <p class="timeline-desc">Categorias Superiores - Planejamento comercial e de carreira estruturado rumo a F4, Turismo Nacional, GT3 e cenários internacionais, visando a Fórmula 1.</p>
+        <!-- Timeline Section (Scroll-driven background video) -->
+        <section id="trajetoria" class="trajectory-scroll-driver">
+            <div class="trajectory-sticky">
+                <!-- Background with Felipe making a curve video -->
+                <div class="trajectory-bg-fixed">
+                    <video id="trajectory-video" class="trajectory-video-element" playsinline muted preload="auto">
+                        <source src="assets/felipe_curva.mp4" type="video/mp4">
+                    </video>
+                    <!-- Dark contrast overlay -->
+                    <div class="trajectory-dark-overlay"></div>
+                </div>
+
+                <!-- Timeline content revealed when curve completes -->
+                <div class="trajectory-content container">
+                    <span class="label-red">CRONOLOGIA DE DESENVOLVIMENTO</span>
+                    <div class="timeline-container">
+                        <div class="timeline-track-line"></div>
+                        <div class="timeline-track-progress"></div>
+                        <div class="timeline-wrapper">
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">KART</div>
+                                <p class="timeline-desc">Base formativa em Campinas, SP. Desenvolvimento de reflexos rápidos, refinamento técnico e primeiros resultados no kartismo regional.</p>
+                            </div>
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">SIM RACING</div>
+                                <p class="timeline-desc">Estudo técnico constante: 2x Campeão F3 Pro Series (Assetto Corsa) e 7x Campeão GT3 Sprint Silver (Assetto Corsa Competizione) em simuladores profissionais.</p>
+                            </div>
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">2024</div>
+                                <p class="timeline-desc">Estreia nos Monopostos - Ingresso na Fórmula Vee Open. Adaptação à aerodinâmica, dinâmica de chassi e suspensão de monopostos.</p>
+                            </div>
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">2025</div>
+                                <p class="timeline-desc">Vice-Campeão Fórmula Vee Open. Liderança de campeonato após vitória épica em Piracicaba (ECPA). Homenageado como Destaque do Ano pela Sociedade Hípica de Campinas.</p>
+                            </div>
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">2026</div>
+                                <p class="timeline-desc">Fórmula 1600 - Transição para a maior categoria de fórmulas do Brasil. Pilotando o chassi Mangusto R-5 motor Ford Zetec Rocam (~122hp, 204 km/h) em Interlagos e Piracicaba.</p>
+                            </div>
+                            <div class="timeline-node">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-year">FUTURO</div>
+                                <p class="timeline-desc">Categorias Superiores - Planejamento comercial e de carreira estruturado rumo a F4, Turismo Nacional, GT3 e cenários internacionais, visando a Fórmula 1.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

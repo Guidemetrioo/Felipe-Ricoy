@@ -115,6 +115,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 video.addEventListener('loadedmetadata', initScrollVideo);
             }
         }
+
+        const trajVideo = document.getElementById("trajectory-video");
+        const initScrollTrajectoryVideo = () => {
+            if (!trajVideo) return;
+            const trajDuration = trajVideo.duration || 2.0;
+            
+            // Set video position to start of clip at the top of scroll
+            trajVideo.currentTime = 0;
+            
+            // Create a timeline linked to ScrollTrigger with smooth scrub and pin
+            const trajTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#trajetoria",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1, // smooth scrub response
+                    pin: ".trajectory-sticky",
+                    onLeave: () => {
+                        document.body.classList.add('trajectory-complete');
+                    },
+                    onEnterBack: () => {
+                        document.body.classList.remove('trajectory-complete');
+                    }
+                }
+            });
+
+            // PHASE 1: Car completes the curve (0% to 60% of scroll - tempo 0 to 6.0 in timeline)
+            trajTl.to(trajVideo, {
+                currentTime: trajDuration,
+                ease: "none",
+                duration: 6.0
+            }, 0);
+
+            // PHASE 2: Information fades in (60% to 100% of scroll - tempo 6.0 to 10.0 in timeline)
+            
+            // 1. Dark contrast overlay fades in
+            trajTl.to(".trajectory-dark-overlay", {
+                opacity: 0.75,
+                duration: 1.5,
+                ease: "power2.out"
+            }, 6.0);
+
+            // 2. Timeline content wrapper fades in and slides up
+            trajTl.to(".trajectory-content", {
+                opacity: 1,
+                y: 0,
+                duration: 2.0,
+                ease: "power2.out"
+            }, 6.0);
+
+            // 3. Animate the active progress line of the timeline
+            const progressLine = document.querySelector('.timeline-track-progress');
+            if (progressLine) {
+                gsap.set(progressLine, { width: "0%" });
+                trajTl.to(progressLine, {
+                    width: "100%",
+                    duration: 3.0,
+                    ease: "power1.inOut"
+                }, 7.0);
+            }
+        };
+
+        if (trajVideo) {
+            if (trajVideo.readyState >= 1) {
+                initScrollTrajectoryVideo();
+            } else {
+                trajVideo.addEventListener('loadedmetadata', initScrollTrajectoryVideo);
+            }
+        }
     }
 
     // 1. MOBILE MENU TOGGLE
@@ -221,24 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     statNumbers.forEach(stat => statsObserver.observe(stat));
 
     // 4. TIMELINE TRACK PROGRESS
-    const timelineSection = document.getElementById('trajetoria');
-    const timelineProgress = document.querySelector('.timeline-track-progress');
-
-    if (timelineSection && timelineProgress) {
-        const animateTimeline = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    timelineProgress.style.width = '100%';
-                    observer.unobserve(entry.target);
-                }
-            });
-        };
-
-        const timelineObserver = new IntersectionObserver(animateTimeline, {
-            threshold: 0.2
-        });
-        timelineObserver.observe(timelineSection);
-    }
+    // Progress line animation is now handled directly inside the GSAP trajectory timeline to sync with the scroll-scrubbed video.
 
     // 5. GALLERY FILTER & LIGHTBOX
     const filterButtons = document.querySelectorAll('.filter-btn');
